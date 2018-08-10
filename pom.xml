@@ -17,38 +17,49 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>${spring-boot-starter-web.artifactId}</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <artifactId>${spring-boot-starter-data-jpa.artifactId}</artifactId>
         </dependency>
 
         <!-- Use MySQL Connector-J -->
 
         <dependency>
             <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
+            <artifactId>${mysql-connector-java.artifactId}</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
+            <artifactId>${spring-boot-starter-test.artifactId}</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-mustache</artifactId>
+            <artifactId>${spring-boot-starter-mustache.artifactId}</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
+            <artifactId>${spring-boot-devtools.artifactId}</artifactId>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>${spring-boot-starter-security.artifactId}</artifactId>
         </dependency>
     </dependencies>
 
     <properties>
         <java.version>1.8</java.version>
+        <spring-boot-starter-security.artifactId>spring-boot-starter-security</spring-boot-starter-security.artifactId>
+        <spring-boot-devtools.artifactId>spring-boot-devtools</spring-boot-devtools.artifactId>
+        <spring-boot-starter-mustache.artifactId>spring-boot-starter-mustache</spring-boot-starter-mustache.artifactId>
+        <spring-boot-starter-test.artifactId>spring-boot-starter-test</spring-boot-starter-test.artifactId>
+        <mysql-connector-java.artifactId>mysql-connector-java</mysql-connector-java.artifactId>
+        <spring-boot-starter-data-jpa.artifactId>spring-boot-starter-data-jpa</spring-boot-starter-data-jpa.artifactId>
+        <spring-boot-starter-web.artifactId>spring-boot-starter-web</spring-boot-starter-web.artifactId>
     </properties>
 
 
