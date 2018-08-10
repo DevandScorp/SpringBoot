@@ -1,5 +1,12 @@
 package com.springboot.entity;
 
-public enum Role {
-    SIMPLE
+import org.springframework.security.core.GrantedAuthority;
+
+public enum Role implements GrantedAuthority {
+    SIMPLE;
+
+    @Override
+    public String getAuthority() {
+        return name();
+    }
 }

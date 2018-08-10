@@ -1,5 +1,6 @@
 package com.springboot.config;
 
+import com.springboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -8,7 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 
-import javax.sql.DataSource;
 
 /**
  * Только зарегестрированные пользователи смогут войти
@@ -17,16 +17,17 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
-    private DataSource dataSource;
+    private UserService userService;
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/","/registration").permitAll()/**Если авторизирован-разрешить доступ*/
+                    .antMatchers("/","/registration").permitAll()/**Эта команда показывает,какие сервлеты не будут требовать доступа к
+                    аутентификации*/
                     .anyRequest().authenticated()
                 .and()
                     .formLogin()
-                    .loginPage("/login")
+                    .loginPage("/login")/**Сначала переходит на эту старницу,а потом на все остальное*/
                     .permitAll()
                 .and()
                     .logout()
@@ -35,9 +36,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication().dataSource(dataSource)
-                                 .passwordEncoder(NoOpPasswordEncoder.getInstance())
-                                 .usersByUsernameQuery("select name,password,active from users where name = ?")/**Важен порядок следования полей-как в классе!!!*/
-                                 .authoritiesByUsernameQuery("select u.name, ur.roles from users u inner join user_role ur on u.id = ur.id where u.name=?");
+        /**
+         * Этого достаточно,чтобы получать информацию о пользователе
+         */
+        auth.userDetailsService(userService)
+                .passwordEncoder(NoOpPasswordEncoder.getInstance());
     }
 }

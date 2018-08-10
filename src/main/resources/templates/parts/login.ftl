@@ -1,16 +1,15 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" >
-<head>
-    <title>Spring Security Example </title>
-</head>
-<body>
-<form action="/login" method="post">
+<#macro login path>
+<form action="${path}" method="post">
     <div><label> User Name : <input type="text" name="username"/> </label></div>
     <div><label> Password: <input type="password" name="password"/> </label></div>
     <!--так нужно делать в каждой форме для протоколов безопасности-->
-    <input type = "hidden" name = "_csrf" value = "{{_csrf.token}}"/>
+    <input type = "hidden" name = "_csrf" value = "${_csrf.token}"/>
     <div><input type="submit" value="Sign In"/></div>
 </form>
-<a href="/registration">Add new user</a>
-</body>
-</html>
+</#macro>
+<#macro logout>
+    <form action="/logout" method="post">
+        <input type="submit" value="Sign Out"/>
+        <input type = "hidden" name = "_csrf" value = "${_csrf.token}"/>
+    </form>
+</#macro>
