@@ -2,6 +2,6 @@
 <#import "parts/login.ftl" as l>
 <@c.page>
 <h1>Add new user</h1>
-${message}
+${message?ifExists}
 <@l.login "/registration"></@l.login>
 </@c.page>

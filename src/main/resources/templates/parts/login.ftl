@@ -1,6 +1,6 @@
 <#macro login path>
 <form action="${path}" method="post">
-    <div><label> User Name : <input type="text" name="username"/> </label></div>
+    <div><label> User Name : <input type="text" name="name"/> </label></div>
     <div><label> Password: <input type="password" name="password"/> </label></div>
     <!--так нужно делать в каждой форме для протоколов безопасности-->
     <input type = "hidden" name = "_csrf" value = "${_csrf.token}"/>
