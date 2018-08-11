@@ -1,6 +1,7 @@
 <#import "parts/common.ftl" as c>
 <#import "parts/login.ftl" as l>
 <@c.page>
+<span><a href="/user">UserList</a></span>
     <div>
         <@l.logout ></@l.logout>
     </div>
