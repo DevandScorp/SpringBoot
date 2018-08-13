@@ -11,8 +11,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.Collections;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -42,7 +42,18 @@ public class UserService implements UserDetailsService {
             }
             return true;
     }
+    private void sendMessage(User user) {
+        if (!StringUtils.isEmpty(user.getEmail())) {
+            String message = String.format(
+                    "Hello, %s! \n" +
+                            "Welcome to Sweater. Please, visit next link: http://localhost:8080/activate/%s",
+                    user.getUsername(),
+                    user.getActivationCode()
+            );
 
+            mailSender.send(user.getEmail(), "Activation code", message);
+        }
+    }
     public boolean activateUser(String code) {
        User user = userRepository.findByActivationCode(code);
        if(user==null){
@@ -54,5 +65,48 @@ public class UserService implements UserDetailsService {
          */
        userRepository.save(user);
         return true;
+    }
+
+    public void saveUser(User user, String name, Map<String,String> form) {
+        user.setName(name);
+        System.out.println("All ModelMap");
+        for(Map.Entry<String,String> map: form.entrySet()){
+            System.out.println(map.getKey() + " ---- " + map.getValue());
+        }
+        /**
+         * Т.к. в мапе могут быть и другие значения,то нам нужно это отфильтровать
+         */
+        Set<String> roles = Arrays.stream(Role.values())
+                .map(Role::name)
+                .collect(Collectors.toSet());
+        user.getRoles().clear();
+        for(String key:form.keySet()){
+            if(roles.contains(key)){
+                user.getRoles().add(Role.valueOf(key));
+            }
+        }
+        userRepository.save(user);
+    }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    public void updateProfile(User user, String password, String email) {
+        String user_email = user.getEmail();
+        boolean isEmailActivated = (email != null && !email.equals(user_email)) || (user_email != null && !user_email.equals(email));
+        if(isEmailActivated){
+            user.setEmail(email);
+            if(!StringUtils.isEmpty(email)){
+                user.setActivationCode(UUID.randomUUID().toString());
+            }
+        }
+        if(!StringUtils.isEmpty(password)){
+            user.setPassword(password);
+        }
+        userRepository.save(user);
+        if(isEmailActivated){
+            sendMessage(user);
+        }
     }
 }
