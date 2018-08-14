@@ -18,6 +18,9 @@ public class User  implements UserDetails {
     private String name;
     @NotBlank(message = "Password shouldn't be empty")
     private String password;
+    /**
+     * Это дерьмокод,автор просто сделал поле в requestAttribute,чтобы не ебать себе мозг
+     */
     @Transient
     @NotBlank(message = "Field shouldn't be empty")
     private String password2;

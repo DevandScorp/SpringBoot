@@ -51,6 +51,14 @@
             </#if>
         </div>
     </div>
+    <div>
+    <div class="g-recaptcha" data-sitekey="6LdW7GkUAAAAAJ1qmQ3ROtO-PfLShvWllc_ePr77"></div>
+        <#if captchaError??>
+                <div class="alert alert-danger">
+                    ${captchaError}
+                </div>
+        </#if>
+    </div>
     <input type="hidden" name="_csrf" value="${_csrf.token}" />
     <button class="btn btn-primary" type="submit">Create</button>
 </form>

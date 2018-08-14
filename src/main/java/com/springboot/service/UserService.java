@@ -37,8 +37,10 @@ public class UserService implements UserDetailsService {
             user.setRoles(Collections.singleton(Role.USER));
             user.setActivationCode(UUID.randomUUID().toString());
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-            userRepository.save(user);
+        /**
+         * Доработать.Позвоялет пользователю заходить без активации.Как вариант-просто сделать всё disabled,пока не активирует
+         */
+        userRepository.save(user);
             if(!StringUtils.isEmpty(user.getEmail())){
                 String message = String.format("Hello,%s!\n" +
                         "Welcome,Sweater. Please,visit next Link : http://localhost:8080/activate/%s",
@@ -67,6 +69,9 @@ public class UserService implements UserDetailsService {
        user.setActivationCode(null);
         /**
          * ТОлько после того,как была получена обратная связь от ссылки,мы сохраняем пользователя.
+         */
+        /**
+         * Это дерьмокод,автор просто сделал поле в requestAttribute,чтобы не ебать себе мозг
          */
         user.setPassword2("default");
        userRepository.save(user);
