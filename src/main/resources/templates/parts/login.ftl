@@ -6,18 +6,49 @@
         <label class="col-sm-2 col-form-label">User Name :</label>
         <div class="col-sm-6">
             <input type="text" name="name" class="form-control" placeholder="User name" />
+            <#if nameError??>
+                <div class="invaild-feedback">
+                    ${nameError}
+                </div>
+            </#if>
         </div>
     </div>
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">Password:</label>
         <div class="col-sm-6">
             <input type="password" name="password" class="form-control" placeholder="Password" />
+            <#if passwordError??>
+                <div class="invaild-feedback">
+                    ${password2Error}
+                </div>
+            </#if>
+            <#if samePasswordError??>
+                <div class="invaild-feedback">
+                    ${samePasswordError}
+                </div>
+            </#if>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Confirm password:</label>
+        <div class="col-sm-6">
+            <input type="password" name="password2" class="form-control" placeholder="Confirm password" />
+            <#if password2Error??>
+                <div class="invaild-feedback">
+                    ${password2Error}
+                </div>
+            </#if>
         </div>
     </div>
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">Email:</label>
         <div class="col-sm-6">
             <input type="email" name="email" class="form-control" placeholder="some@some.com" />
+            <#if emailError??>
+                <div class="invaild-feedback">
+                    ${emailError}
+                </div>
+            </#if>
         </div>
     </div>
     <input type="hidden" name="_csrf" value="${_csrf.token}" />

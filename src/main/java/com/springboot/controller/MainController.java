@@ -8,16 +8,20 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Controller
 public class MainController {
@@ -51,39 +55,45 @@ public class MainController {
     }
     @PostMapping("/main")
     public String add(@AuthenticationPrincipal User user,
-                      @RequestParam String text,
-                      @RequestParam String tag,
-                      Map<String,Object> model,
+                      @Valid Message message,/**Тег,который запустит валидацию*/
+                      BindingResult bindingResult,
+                      Model model,/**BindingResult всега должен идти перед Model,т.к. если ту будет просто Map,то весь биндинг будет
+                           просто сыпаться во View*/
                       @RequestParam("file") MultipartFile file){
-        Message message = new Message();
-        message.setText(text);
-        message.setTag(tag);
+
         message.setAuthor(user);
-        if(file!=null){
-            File uploadDir = new File(uploadPath);
-            if(!uploadDir.exists()){
-                uploadDir.mkdir();
-            }
-            System.out.println(uploadDir.getAbsolutePath());
-            /**Обеспечиваем уникальный идентификатор*/
-            String uuid = UUID.randomUUID().toString();
-            String resultFileName = uuid + "." + file.getOriginalFilename();
-            System.out.println("ResultFileName " + resultFileName);
-            try {
+        if(bindingResult.hasErrors()){
+            Map<String, String> errors = ControllerUtils.getErrors(bindingResult);
+            model.mergeAttributes(errors);
+        }else{
+            if(file!=null){
+                File uploadDir = new File(uploadPath);
+                if(!uploadDir.exists()){
+                    uploadDir.mkdir();
+                }
+                System.out.println(uploadDir.getAbsolutePath());
+                /**Обеспечиваем уникальный идентификатор*/
+                String uuid = UUID.randomUUID().toString();
+                String resultFileName = uuid + "." + file.getOriginalFilename();
+                System.out.println("ResultFileName " + resultFileName);
+                try {
 
 //                File filet = new File(resultFileName);
 //                System.out.println(filet.getAbsolutePath());
 //                file.transferTo(new File(resultFileName));
-                file.transferTo(new File( "../../../../../../../../../../"+ uploadPath + "/" + resultFileName));
-            } catch (IOException e) {
-                e.printStackTrace();
+                    file.transferTo(new File( "../../../../../../../../../../"+ uploadPath + "/" + resultFileName));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                message.setFilename(resultFileName);
             }
-            message.setFilename(resultFileName);
+            model.addAttribute("message",message);
+            messageRepository.save(message);
         }
-        messageRepository.save(message);
+
         Iterable<Message> all = messageRepository.findAll();
-        model.put("sometext","It is the main page");
-        model.put("messages",all);
+        model.addAttribute("sometext","It is the main page");
+        model.addAttribute("messages",all);
         return "main";
     }
 

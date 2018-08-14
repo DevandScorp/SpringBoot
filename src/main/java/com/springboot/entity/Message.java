@@ -1,15 +1,20 @@
 package com.springboot.entity;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class Message {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
-
+    @NotBlank(message = "Please, fill this field")
+    @Length(max = 255,message = "Message's length should be less than 255 symbols")
     private String text;
-
+    @NotBlank(message = "Please, fill this field")
+    @Length(max = 255,message = "Tag's length should be less than 255 symbols")
     private String tag;
     /**
      * Для того,чтобы знать,кто написал сообщение.
