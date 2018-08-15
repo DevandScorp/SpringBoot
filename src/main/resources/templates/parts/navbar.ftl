@@ -24,6 +24,9 @@
                 <a class="nav-link" href="/user/profile">Edit profile</a>
             </li>
             </#if>
+            <li class="nav-item">
+                <a class="nav-link" href="/user-messages/${currentUserId}">My Messages</a>
+            </li>
         </ul>
         <div class="navbar-text">${name}</div>
         <@l.logout ></@l.logout>

@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -53,7 +55,7 @@ public class MainController {
         model.addAttribute("messages",all);
         return "main";
     }
-    @PostMapping("/main")
+    @PostMapping("/main")/**AuthenticationPrincipal берет пользователя из сессии*/
     public String add(@AuthenticationPrincipal User user,
                       @Valid Message message,/**Тег,который запустит валидацию*/
                       BindingResult bindingResult,
@@ -96,5 +98,16 @@ public class MainController {
         model.addAttribute("messages",all);
         return "main";
     }
+    @GetMapping("/user-messages/{user}")/**AuthenticationPrincipal берет пользователя из сессии*/
+    public String userMessages(@AuthenticationPrincipal User currentUser,
+                                /**Чтобы из запроса сразу брал нужную переменную*/
+                                @PathVariable User user,
+                                Model model){
+        Set<Message> messages = user.getMessages();
+        model.addAttribute("messages",messages);
+        model.addAttribute("isCurrentUser",currentUser.equals(user));
+        return "userMessages";
+    }
+
 
 }
