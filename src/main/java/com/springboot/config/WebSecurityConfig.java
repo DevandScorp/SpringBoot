@@ -41,8 +41,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .formLogin()
                     .loginPage("/login")/**Сначала переходит на эту старницу,а потом на все остальное*/
                     .permitAll()
-                .and()
-                    .rememberMe()
+//                .and()
+//                    .rememberMe()
                 .and()
                     .logout()
                     .permitAll();
